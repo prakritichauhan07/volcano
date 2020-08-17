@@ -24,6 +24,7 @@ jobs:
     - stage: Code Verify 
       #Golint & Gofmt
       arch: arm64
+      install: sudo apt-get install jq
       script:
         - make verify
     - #Verify Deployment Yaml
