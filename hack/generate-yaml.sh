@@ -41,12 +41,17 @@ case $LOCAL_OS in
 esac
 
 # Step1. install helm binary
+if [[ "$(uname -m)" == "aarch64" ]] ; then 
+    ARCH=arm64
+else
+    ARCH=amd64
+fi
 if [[ ! -f "${HELM_BIN_DIR}/version.helm.${HELM_VER}" ]] ; then
     TD=$(mktemp -d)
     cd "${TD}" && \
-        curl -Lo "${TD}/helm.tgz" "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VER}-${LOCAL_OS}-amd64.tar.gz" && \
+        curl -Lo "${TD}/helm.tgz" "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VER}-${LOCAL_OS}-${ARCH}.tar.gz" && \
         tar xfz helm.tgz && \
-        mv ${LOCAL_OS}-amd64/helm "${HELM_BIN_DIR}/helm-${HELM_VER}" && \
+        mv ${LOCAL_OS}-${ARCH}/helm "${HELM_BIN_DIR}/helm-${HELM_VER}" && \
         cp "${HELM_BIN_DIR}/helm-${HELM_VER}" "${HELM_BIN_DIR}/helm" && \
         chmod +x ${HELM_BIN_DIR}/helm
         rm -rf "${TD}" && \
