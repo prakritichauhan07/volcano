@@ -23,36 +23,41 @@ jobs:
   include:
     - stage: Code Verify 
       #Golint & Gofmt
+      arch: arm64
       script:
         - make verify
     - #Verify Deployment Yaml
+      arch: arm64
       script:
         - echo "Verifying contents of installer/development.yaml with generated yaml"
         - make TAG=latest generate-yaml
         - make verify-generated-yaml
     - #UT Tests
+      arch: arm64
       script:
         - make unit-test
 
     - stage: E2E Tests #E2E Jobs Parallel
+      arch: arm64
       before_script:
         # Download kubectl
-        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
         - sudo chmod +x /usr/local/bin/kubectl
         # Download kind binary (0.6.1)
-        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-amd64
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
         - sudo chmod +x /usr/local/bin/kind
       script:
         - make vcctl
         - make images
         - travis_retry make e2e-test-jobp
     - #E2E Job Sequence
+      arch: arm64
       before_script:
         # Download kubectl
-        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
         - sudo chmod +x /usr/local/bin/kubectl
         # Download kind binary (0.6.1)
-        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-amd64
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
         - sudo chmod +x /usr/local/bin/kind
       script:
         - make vcctl
@@ -60,30 +65,33 @@ jobs:
         - travis_retry make e2e-test-jobseq
    
     - #E2E Scheduling Base Suits
+      arch: arm64
       before_script:
         # Download kubectl
-        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
         - sudo chmod +x /usr/local/bin/kubectl
         # Download kind binary (0.6.1)
-        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-amd64
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
         - sudo chmod +x /usr/local/bin/kind
       script:
         - make vcctl
         - make images
         - travis_retry make e2e-test-schedulingbase
     - #E2E Scheduling Action 
+      arch: arm64
       before_script:
         # Download kubectl
-        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl
+        - sudo curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/arm64/kubectl
         - sudo chmod +x /usr/local/bin/kubectl
         # Download kind binary (0.6.1)
-        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-amd64
+        - sudo curl -o /usr/local/bin/kind -L https://github.com/kubernetes-sigs/kind/releases/download/v0.6.1/kind-linux-arm64
         - sudo chmod +x /usr/local/bin/kind
       script:
         - make vcctl
         - make images
         - travis_retry make e2e-test-schedulingaction
     - stage: Publish latest Docker Image on Daily Build
+      arch: arm64
       script:
         - echo "Publish latest Docker Images to DockerHub"
       deploy:
